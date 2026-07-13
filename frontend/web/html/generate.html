@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Создание отчёта — ГОСТ Отчёт</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --green: #00674F;
+            --green-dark: #004d3b;
+            --green-light: #E6F4F0;
+            --black: #0B0B0B;
+            --white: #FFFFFF;
+            --gray: #F5F5F5;
+            --border-w: 2px;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .btn {
+            display: inline-block;
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding: 12px 28px;
+            border: var(--border-w) dashed var(--black);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: var(--black);
+            background: var(--white);
+            text-align: center;
+            font-family: inherit;
+            border-radius: 0;
+        }
+
+        .btn:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .btn-primary {
+            background: var(--green);
+            color: var(--white);
+            border-color: var(--green);
+        }
+
+        .btn-primary:hover {
+            background: var(--green-dark);
+            border-color: var(--green-dark);
+            color: var(--white);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--black);
+            border-color: var(--black);
+        }
+
+        .btn-outline:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .btn-small {
+            padding: 6px 16px;
+            font-size: 0.75rem;
+        }
+
+        .navbar {
+            padding: 20px 0;
+            border-bottom: var(--border-w) dashed var(--black);
+            background: var(--white);
+            flex-shrink: 0;
+        }
+
+        .navbar .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.4rem;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--black);
+        }
+
+        .logo-box {
+            display: inline-block;
+            background: var(--green);
+            color: var(--white);
+            padding: 2px 12px;
+            border: var(--border-w) solid var(--black);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--black);
+            padding: 6px 14px;
+            border: var(--border-w) dashed transparent;
+            transition: 0.15s;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links a:hover {
+            border-color: var(--green);
+            background: var(--green-light);
+        }
+
+        .report-page {
+            flex: 1;
+            padding: 40px 0 60px;
+            background: var(--gray);
+            border-top: var(--border-w) dashed var(--black);
+            border-bottom: var(--border-w) dashed var(--black);
+        }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .report-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .report-form label {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.06em;
+        }
+
+        .report-form textarea {
+            width: 100%;
+            min-height: 400px;
+            padding: 20px;
+            font-family: inherit;
+            font-size: 1rem;
+            border: var(--border-w) dashed var(--black);
+            background: var(--white);
+            resize: vertical;
+            outline: none;
+            border-radius: 0;
+            transition: 0.15s;
+        }
+
+        .report-form textarea:focus {
+            border-color: var(--green);
+            background: var(--green-light);
+        }
+
+        .report-form .form-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .image-section {
+            background: var(--white);
+            border: var(--border-w) dashed var(--black);
+            padding: 24px 20px;
+            display: flex;
+            flex-direction: column;
+            max-height: 600px;
+        }
+
+        .image-section .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: var(--border-w) dashed var(--black);
+        }
+
+        .image-section .section-header h3 {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 1rem;
+            letter-spacing: 0.04em;
+        }
+
+        .image-section .section-header .file-input-wrapper {
+            position: relative;
+        }
+
+        .image-section .section-header .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .image-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-right: 4px;
+        }
+
+        .image-list::-webkit-scrollbar {
+            width: 8px;
+            background: var(--gray);
+        }
+        .image-list::-webkit-scrollbar-thumb {
+            background: var(--green);
+            border: var(--border-w) solid var(--black);
+        }
+
+        .image-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--green-light);
+            border: var(--border-w) dashed var(--black);
+            padding: 8px 12px 8px 8px;
+            transition: 0.15s;
+        }
+
+        .image-item:hover {
+            background: #d0e8e0;
+        }
+
+        .image-item .preview {
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            border: var(--border-w) dashed var(--black);
+            background: var(--white);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-item .preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-item .caption-input {
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .image-item .caption-input input {
+            width: 100%;
+            padding: 6px 10px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            border: var(--border-w) dashed var(--black);
+            background: var(--white);
+            outline: none;
+            border-radius: 0;
+            transition: 0.15s;
+        }
+
+        .image-item .caption-input input:focus {
+            border-color: var(--green);
+            background: var(--green-light);
+        }
+
+        .image-item .remove-btn {
+            background: none;
+            border: var(--border-w) dashed var(--black);
+            width: 32px;
+            height: 32px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--black);
+            background: var(--white);
+            flex-shrink: 0;
+            border-radius: 0;
+        }
+
+        .image-item .remove-btn:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .image-empty {
+            color: #999;
+            font-weight: 600;
+            text-align: center;
+            padding: 30px 0;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .footer {
+            padding: 24px 0;
+            background: var(--white);
+            border-top: var(--border-w) dashed var(--black);
+            flex-shrink: 0;
+        }
+
+        .footer .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer p {
+            font-weight: 600;
+            font-size: 0.85rem;
+            opacity: 0.6;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--black);
+            border-bottom: var(--border-w) dashed transparent;
+            transition: 0.15s;
+        }
+
+        .footer-links a:hover {
+            border-bottom-color: var(--green);
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 4px solid var(--green-light);
+            border-top-color: var(--green);
+            animation: spin 0.9s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .field-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 10px;
+        }
+
+        .field-grid .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .field-grid .field-group label {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 0.06em;
+            opacity: 0.85;
+        }
+
+        .field-grid .field-group input {
+            width: 100%;
+            padding: 12px 14px;
+            font-family: inherit;
+            font-size: 1rem;
+            border: var(--border-w) dashed var(--black);
+            background: var(--white);
+            outline: none;
+            border-radius: 0;
+            transition: 0.15s;
+        }
+
+        .field-grid .field-group input:focus {
+            border-color: var(--green);
+            background: var(--green-light);
+        }
+
+        .generate-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.35);
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+
+        .generate-overlay.active {
+            display: flex;
+        }
+
+        .generate-overlay .modal {
+            background: var(--white);
+            border: var(--border-w) dashed var(--black);
+            padding: 26px 24px;
+            width: min(560px, 100%);
+        }
+
+        .generate-overlay .modal-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .generate-overlay .modal-text {
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            font-size: 1rem;
+        }
+
+        .generate-overlay .modal-sub {
+            opacity: 0.7;
+            margin-top: 4px;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 1024px) {
+            .report-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .image-section {
+                max-height: 400px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .navbar .container {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+            .nav-links {
+                justify-content: center;
+            }
+            .report-page {
+                padding: 24px 0 40px;
+            }
+            .report-form textarea {
+                min-height: 250px;
+            }
+            .image-section {
+                max-height: 350px;
+                padding: 16px;
+            }
+            .image-item {
+                flex-wrap: wrap;
+            }
+            .image-item .preview {
+                width: 50px;
+                height: 50px;
+            }
+            .footer .container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .image-section .section-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+            .image-section .section-header .file-input-wrapper {
+                width: 100%;
+            }
+            .image-section .section-header .file-input-wrapper .btn {
+                width: 100%;
+                text-align: center;
+            }
+            .field-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+            background: var(--white);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--green);
+            border: var(--border-w) solid var(--black);
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--white);
+            border-left: var(--border-w) dashed var(--black);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">
+                <span class="logo-box">ГОСТ</span>
+                Отчёт
+            </a>
+            <div class="nav-links">
+                <a href="/lk/list/">Личный кабинет</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="report-page">
+        <div class="container">
+            <h1 style="font-size:clamp(2rem,4vw,3.2rem); font-weight:700; text-transform:uppercase; letter-spacing:-0.02em;">
+                Создание <span style="background:var(--green);color:var(--white);padding:0 8px;">отчёта</span>
+            </h1>
+            <div style="height:4px; width:120px; background:var(--black); margin:12px 0 8px;"></div>
+            <p style="opacity:0.7; font-size:1rem; max-width:600px;">Введите текст ЛР и добавьте изображения с подписями (в любом порядке)</p>
+
+            <div class="report-grid">
+                <div class="report-form">
+                    <form id="reportForm">
+                        <textarea id="reportText" placeholder="Введите содержание отчёта…" required></textarea>
+
+                        <div style="margin-top:12px;">
+                            <label>Параметры ЛР</label>
+                            <div class="field-grid">
+                                <div class="field-group">
+                                    <label for="department">Кафедра</label>
+                                    <input id="department" type="text" placeholder="Например: ИВТ" />
+                                </div>
+                                <div class="field-group">
+                                    <label for="professor">Преподаватель</label>
+                                    <input id="professor" type="text" placeholder="ФИО" />
+                                </div>
+                                <div class="field-group">
+                                    <label for="professor_grade">Должность преп.</label>
+                                    <input id="professor_grade" type="text" placeholder="Например: доцент" />
+                                </div>
+                                <div class="field-group">
+                                    <label for="course">Курс</label>
+                                    <input id="course" type="text" placeholder="Например: 3" />
+                                </div>
+                                <div class="field-group">
+                                    <label for="group">Группа</label>
+                                    <input id="group" type="text" placeholder="Например: ПИ-21" />
+                                </div>
+                                <div class="field-group">
+                                    <label for="student">Студент</label>
+                                    <input id="student" type="text" placeholder="ФИО" />
+                                </div>
+                                <div class="field-group">
+                                    <label for="lab_number">Номер ЛР</label>
+                                    <input id="lab_number" type="text" placeholder="Например: 5" />
+                                </div>
+                                <div class="field-group">
+                                    <label for="lab_title">Название ЛР</label>
+                                    <input id="lab_title" type="text" placeholder="Например: ..." />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions" style="margin-top:18px;">
+                            <button id="submitBtn" type="submit" class="btn btn-primary">Получить отчёт</button>
+                            <button type="reset" class="btn btn-outline">Очистить текст</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="image-section">
+                    <div class="section-header">
+                        <h3>Изображения</h3>
+                        <div class="file-input-wrapper">
+                            <button class="btn btn-small btn-primary" style="pointer-events:none;">➕ Добавить</button>
+                            <input type="file" id="imageUpload" accept="image/*" multiple />
+                        </div>
+                    </div>
+                    <div class="image-list" id="imageList">
+                        <div class="image-empty">Нет изображений</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="generate-overlay" id="generateOverlay">
+        <div class="modal">
+            <div class="modal-content">
+                <div class="spinner" aria-hidden="true"></div>
+                <div>
+                    <div class="modal-text">Идёт генерация…</div>
+                    <div class="modal-sub">Это может занять некоторое время</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 ГОСТ Отчёт</p>
+            <div class="footer-links">
+                <a href="https://alexdenkk.ru">Контакты</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (function() {
+            const fileInput = document.getElementById('imageUpload');
+            const imageList = document.getElementById('imageList');
+            const emptyMsg = imageList.querySelector('.image-empty');
+
+            fileInput.addEventListener('change', function(e) {
+                const files = Array.from(e.target.files);
+                if (files.length === 0) return;
+
+                if (emptyMsg) {
+                    emptyMsg.remove();
+                }
+
+                files.forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        const item = createImageItem(ev.target.result, file.name);
+                        imageList.appendChild(item);
+                    };
+                    reader.readAsDataURL(file);
+                });
+
+                fileInput.value = '';
+            });
+
+            function createImageItem(src, filename) {
+                const div = document.createElement('div');
+                div.className = 'image-item';
+
+                const preview = document.createElement('div');
+                preview.className = 'preview';
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = filename;
+                preview.appendChild(img);
+                div.appendChild(preview);
+
+                const captionDiv = document.createElement('div');
+                captionDiv.className = 'caption-input';
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.placeholder = 'Подпись к изображению';
+                input.value = filename.replace(/\.[^/.]+$/, '');
+                captionDiv.appendChild(input);
+                div.appendChild(captionDiv);
+
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-btn';
+                removeBtn.textContent = '✕';
+                removeBtn.setAttribute('aria-label', 'Удалить');
+                removeBtn.addEventListener('click', function() {
+                    div.remove();
+                    if (imageList.children.length === 0) {
+                        const empty = document.createElement('div');
+                        empty.className = 'image-empty';
+                        empty.textContent = 'Нет изображений';
+                        imageList.appendChild(empty);
+                    }
+                });
+                div.appendChild(removeBtn);
+
+                return div;
+            }
+
+            const apiBaseUrl = 'https://api.gost.alexdenkk.ru';
+            const LS_KEYS = {
+                access: 'gost_access_token',
+                refresh: 'gost_refresh_token',
+            };
+
+            function getAccessToken(){ return localStorage.getItem(LS_KEYS.access); }
+            function getRefreshToken(){ return localStorage.getItem(LS_KEYS.refresh); }
+            function setTokens(access, refresh){
+                if (access) localStorage.setItem(LS_KEYS.access, access);
+                if (refresh) localStorage.setItem(LS_KEYS.refresh, refresh);
+            }
+            function clearTokens(){
+                localStorage.removeItem(LS_KEYS.access);
+                localStorage.removeItem(LS_KEYS.refresh);
+            }
+
+            async function refreshTokensOnce(){
+                const refreshToken = getRefreshToken();
+                if (!refreshToken) throw new Error('no refresh token');
+
+                const res = await fetch(apiBaseUrl + '/user/refresh/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ refresh_token: refreshToken })
+                });
+
+                if (!res.ok) throw new Error('refresh failed');
+                const data = await res.json();
+                setTokens(data.access_token, data.refresh_token);
+                return data;
+            }
+
+            let refreshTimer = null;
+            function startRefreshLoop(){
+                if (refreshTimer) return;
+                if (getRefreshToken()) {
+                    refreshTimer = setInterval(() => {
+                        refreshTokensOnce().catch(() => {
+                            clearTokens();
+                            window.location.href = '/auth/';
+                        });
+                    }, 60000);
+                }
+            }
+
+            async function apiRequest(path, opts = {}){
+                const accessToken = getAccessToken();
+                const headers = new Headers(opts.headers || {});
+                headers.set('Content-Type', headers.get('Content-Type') || 'application/json');
+                if (accessToken) headers.set('Authorization', 'Bearer ' + accessToken);
+
+                const res = await fetch(apiBaseUrl + path, { ...opts, headers });
+
+                if (res.status === 403) {
+                    try {
+                        await refreshTokensOnce();
+                        const retryAccess = getAccessToken();
+                        const retryHeaders = new Headers(opts.headers || {});
+                        retryHeaders.set('Content-Type', retryHeaders.get('Content-Type') || 'application/json');
+                        if (retryAccess) retryHeaders.set('Authorization', 'Bearer ' + retryAccess);
+                        return await fetch(apiBaseUrl + path, { ...opts, headers: retryHeaders });
+                    } catch (e) {
+                        clearTokens();
+                        window.location.href = '/auth/';
+                        throw e;
+                    }
+                }
+
+                return res;
+            }
+
+            const form = document.getElementById('reportForm');
+            const overlay = document.getElementById('generateOverlay');
+            const submitBtn = document.getElementById('submitBtn');
+
+            function setGenerating(isGenerating) {
+                overlay.classList.toggle('active', isGenerating);
+                if (submitBtn) submitBtn.disabled = isGenerating;
+                form.querySelectorAll('input, textarea, button').forEach(el => {
+                    if (el === submitBtn) return;
+                    el.disabled = isGenerating;
+                });
+            }
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const accessToken = getAccessToken();
+                if (!accessToken) {
+                    window.location.href = '/auth/';
+                    return;
+                }
+
+                const text = document.getElementById('reportText').value;
+                const items = imageList.querySelectorAll('.image-item');
+                const imagesData = [];
+
+                items.forEach(item => {
+                    const img = item.querySelector('.preview img');
+                    const caption = item.querySelector('.caption-input input').value;
+                    const dataUrl = img.src;
+                    const base64 = dataUrl.includes('base64,') ? dataUrl.split('base64,')[1] : dataUrl;
+                    imagesData.push({
+                        description: caption || '',
+                        base_64: base64
+                    });
+                });
+
+                const department = document.getElementById('department')?.value || '';
+                const professor = document.getElementById('professor')?.value || '';
+                const professor_grade = document.getElementById('professor_grade')?.value || '';
+                const course = document.getElementById('course')?.value || '';
+                const group = document.getElementById('group')?.value || '';
+                const student = document.getElementById('student')?.value || '';
+                const lab_number = document.getElementById('lab_number')?.value || '';
+                const lab_title = document.getElementById('lab_title')?.value || '';
+
+                try {
+                    setGenerating(true);
+                    startRefreshLoop();
+
+                    const res = await apiRequest('/lab/', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            text,
+                            images: imagesData,
+                            department,
+                            professor,
+                            professor_grade,
+                            course,
+                            group,
+                            student,
+                            lab_number,
+                            lab_title,
+                        })
+                    });
+
+                    if (!res.ok) {
+                        const data = await res.json().catch(()=>null);
+                        alert((data && data.error) ? data.error : 'Ошибка генерации');
+                        setGenerating(false);
+                        return;
+                    }
+
+                    window.location.href = '/lk/list/';
+                } catch (err) {
+                    setGenerating(false);
+                    alert('Ошибка сети при генерации');
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

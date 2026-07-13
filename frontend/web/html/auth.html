@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Вход / Регистрация — ГОСТ Отчёт</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --green: #00674F;
+            --green-dark: #004d3b;
+            --green-light: #E6F4F0;
+            --black: #0B0B0B;
+            --white: #FFFFFF;
+            --gray: #F5F5F5;
+            --border-w: 2px;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .btn {
+            display: inline-block;
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding: 14px 32px;
+            border: var(--border-w) dashed var(--black);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: var(--black);
+            background: var(--white);
+            text-align: center;
+            font-family: inherit;
+            border-radius: 0;
+        }
+
+        .btn:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .btn-primary {
+            background: var(--green);
+            color: var(--white);
+            border-color: var(--green);
+        }
+
+        .btn-primary:hover {
+            background: var(--green-dark);
+            border-color: var(--green-dark);
+            color: var(--white);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--black);
+            border-color: var(--black);
+        }
+
+        .btn-outline:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.4rem;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--black);
+        }
+
+        .logo-box {
+            display: inline-block;
+            background: var(--green);
+            color: var(--white);
+            padding: 2px 12px;
+            border: var(--border-w) solid var(--black);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--black);
+            padding: 6px 14px;
+            border: var(--border-w) dashed transparent;
+            transition: 0.15s;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links a:hover {
+            border-color: var(--green);
+            background: var(--green-light);
+        }
+
+        .auth-page {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            background: var(--gray);
+            border-top: var(--border-w) dashed var(--black);
+            border-bottom: var(--border-w) dashed var(--black);
+        }
+
+        .auth-card {
+            max-width: 520px;
+            width: 100%;
+            background: var(--white);
+            border: var(--border-w) dashed var(--black);
+            padding: 48px 40px;
+        }
+
+        .auth-card .tag {
+            display: inline-block;
+            background: var(--green);
+            color: var(--white);
+            font-weight: 700;
+            font-size: 0.7rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 4px 14px;
+            border: var(--border-w) solid var(--black);
+            margin-bottom: 20px;
+        }
+
+        .auth-card h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            line-height: 1.1;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .auth-card h1 span {
+            background: var(--green);
+            color: var(--white);
+            padding: 0 6px;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+        }
+
+        .auth-card .sub {
+            font-size: 0.95rem;
+            opacity: 0.7;
+            margin-bottom: 24px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 28px;
+            border: var(--border-w) solid var(--black);
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 12px 16px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            background: var(--white);
+            border: none;
+            cursor: pointer;
+            transition: 0.15s;
+            font-family: inherit;
+            color: var(--black);
+            border-right: var(--border-w) solid var(--black);
+            text-align: center;
+            letter-spacing: 0.03em;
+            border-radius: 0;
+        }
+
+        .auth-tab:last-child {
+            border-right: none;
+        }
+
+        .auth-tab:hover {
+            background: var(--green-light);
+        }
+
+        .auth-tab.active {
+            background: var(--green);
+            color: var(--white);
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .auth-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .auth-form label {
+            display: block;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.06em;
+            margin-bottom: 6px;
+        }
+
+        .auth-form input[type="email"],
+        .auth-form input[type="password"] {
+            width: 100%;
+            padding: 14px 18px;
+            font-family: inherit;
+            font-size: 1rem;
+            border: var(--border-w) dashed var(--black);
+            background: var(--white);
+            outline: none;
+            transition: 0.15s;
+            border-radius: 0;
+        }
+
+        .auth-form input:focus {
+            border-color: var(--green);
+            background: var(--green-light);
+        }
+
+        .auth-form .btn {
+            width: 100%;
+            justify-content: center;
+            margin-top: 8px;
+        }
+
+        .auth-form .auth-alt {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        .auth-form .auth-alt a {
+            font-weight: 700;
+            color: var(--green);
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .auth-form .auth-alt a:hover {
+            border-bottom-color: var(--green);
+        }
+
+        .auth-form .form-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+
+        .auth-form .form-row label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: none;
+            cursor: pointer;
+        }
+
+        .auth-form .form-row input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--green);
+            border: var(--border-w) dashed var(--black);
+            border-radius: 0;
+        }
+
+        .auth-form .form-row a {
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: var(--green);
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+        }
+
+        .auth-form .form-row a:hover {
+            border-bottom-color: var(--green);
+        }
+
+        @media (max-width: 640px) {
+            .auth-card {
+                padding: 32px 20px;
+            }
+            .auth-card h1 {
+                font-size: 1.8rem;
+            }
+            .auth-tabs {
+                flex-direction: column;
+                border-right: var(--border-w) solid var(--black);
+            }
+            .auth-tab {
+                border-right: none;
+                border-bottom: var(--border-w) solid var(--black);
+            }
+            .auth-tab:last-child {
+                border-bottom: none;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+            background: var(--white);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--green);
+            border: var(--border-w) solid var(--black);
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--white);
+            border-left: var(--border-w) dashed var(--black);
+        }
+    </style>
+</head>
+<body>
+
+    <main class="auth-page">
+        <div class="auth-card">
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Вход</button>
+                <button class="auth-tab" data-tab="register">Регистрация</button>
+            </div>
+
+            <div id="login-form" class="auth-form active">
+                <form>
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" placeholder="example@domain.ru" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Пароль</label>
+                        <input type="password" id="login-password" placeholder="••••••••" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Войти</button>
+                </form>
+            </div>
+
+            <div id="register-form" class="auth-form">
+                <form>
+                    <div class="form-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" placeholder="ivan@example.ru" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Пароль</label>
+                        <input type="password" id="register-password" placeholder="минимум 8 символов" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="register-confirm">Подтвердите пароль</label>
+                        <input type="password" id="register-confirm" placeholder="повторите пароль" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        (function() {
+            const tabs = document.querySelectorAll('.auth-tab');
+            const forms = {
+                login: document.getElementById('login-form'),
+                register: document.getElementById('register-form')
+            };
+            const altLinks = document.querySelectorAll('[data-tab]');
+
+            function switchTab(tabId) {
+                tabs.forEach(tab => {
+                    tab.classList.remove('active');
+                    if (tab.dataset.tab === tabId) {
+                        tab.classList.add('active');
+                    }
+                });
+                Object.keys(forms).forEach(key => {
+                    forms[key].classList.remove('active');
+                });
+                if (forms[tabId]) {
+                    forms[tabId].classList.add('active');
+                }
+            }
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tabId = this.dataset.tab;
+                    switchTab(tabId);
+                });
+            });
+
+            altLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tabId = this.dataset.tab;
+                    if (tabId) {
+                        switchTab(tabId);
+                    }
+                });
+            });
+
+            const apiBaseUrl = 'https://api.gost.alexdenkk.ru';
+
+            const LS_KEYS = {
+                access: 'gost_access_token',
+                refresh: 'gost_refresh_token',
+            };
+
+            function getAccessToken() {
+                return localStorage.getItem(LS_KEYS.access);
+            }
+
+            function getRefreshToken() {
+                return localStorage.getItem(LS_KEYS.refresh);
+            }
+
+            function setTokens(access, refresh) {
+                if (access) localStorage.setItem(LS_KEYS.access, access);
+                if (refresh) localStorage.setItem(LS_KEYS.refresh, refresh);
+            }
+
+            function clearTokens() {
+                localStorage.removeItem(LS_KEYS.access);
+                localStorage.removeItem(LS_KEYS.refresh);
+            }
+
+            async function refreshTokensOnce() {
+                const refreshToken = getRefreshToken();
+                if (!refreshToken) throw new Error('no refresh token');
+
+                const res = await fetch(apiBaseUrl + '/user/refresh/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ refresh_token: refreshToken })
+                });
+
+                if (!res.ok) throw new Error('refresh failed');
+
+                const data = await res.json();
+                setTokens(data.access_token, data.refresh_token);
+                return data;
+            }
+
+            let refreshTimer = null;
+
+            function startRefreshLoop() {
+                if (refreshTimer) return;
+                if (getRefreshToken()) {
+                    refreshTimer = setInterval(() => {
+                        refreshTokensOnce().catch(() => {
+                            clearTokens();
+                            window.location.href = '/auth/';
+                        });
+                    }, 60000);
+                }
+            }
+
+            async function apiRequest(path, opts = {}) {
+                const accessToken = getAccessToken();
+                const headers = new Headers(opts.headers || {});
+                headers.set('Content-Type', headers.get('Content-Type') || 'application/json');
+
+                if (accessToken) {
+                    headers.set('Authorization', 'Bearer ' + accessToken);
+                }
+
+                const res = await fetch(apiBaseUrl + path, {
+                    ...opts,
+                    headers
+                });
+
+                if (res.status === 403) {
+                    try {
+                        await refreshTokensOnce();
+                        const retryAccess = getAccessToken();
+                        const retryHeaders = new Headers(opts.headers || {});
+                        retryHeaders.set('Content-Type', retryHeaders.get('Content-Type') || 'application/json');
+                        if (retryAccess) retryHeaders.set('Authorization', 'Bearer ' + retryAccess);
+
+                        return await fetch(apiBaseUrl + path, { ...opts, headers: retryHeaders });
+                    } catch (e) {
+                        clearTokens();
+                        window.location.href = '/auth/';
+                        throw e;
+                    }
+                }
+
+                return res;
+            }
+
+            function showError(message) {
+                alert(message);
+            }
+
+            const loginForm = document.querySelector('#login-form form');
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+
+                try {
+                    const res = await fetch(apiBaseUrl + '/user/signin/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password })
+                    });
+
+                    if (!res.ok) {
+                        const data = await res.json().catch(() => null);
+                        showError(data && data.error ? data.error : 'Ошибка входа');
+                        return;
+                    }
+
+                    const data = await res.json();
+                    setTokens(data.access_token, data.refresh_token);
+                    startRefreshLoop();
+                    window.location.href = '/lk/list/';
+                } catch (err) {
+                    showError('Ошибка сети при входе');
+                }
+            });
+
+            const registerForm = document.querySelector('#register-form form');
+            registerForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const email = document.getElementById('register-email').value;
+                const password = document.getElementById('register-password').value;
+                const confirm = document.getElementById('register-confirm').value;
+
+                if (password !== confirm) {
+                    showError('Пароли не совпадают');
+                    return;
+                }
+
+                try {
+                    const res = await fetch(apiBaseUrl + '/user/signup/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password })
+                    });
+
+                    if (!res.ok) {
+                        const data = await res.json().catch(() => null);
+                        showError(data && data.error ? data.error : 'Ошибка регистрации');
+                        return;
+                    }
+
+                    showError('Регистрация успешна. Теперь выполните вход.');
+                    switchTab('login');
+                } catch (err) {
+                    showError('Ошибка сети при регистрации');
+                }
+            });
+        })();
+    </script>
+
+</body>
+</html>

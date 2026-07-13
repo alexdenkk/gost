@@ -1,0 +1,99 @@
+services:
+  lab:
+    container_name: lab
+    restart: on-failure
+
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+
+    command: ./labs
+
+    environment:
+      - DB_PORT=${DB_PORT}
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+
+      - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+
+      - AGENT_BASE_URL=${AGENT_BASE_URL}
+      - AGENT_ACCESS_TOKEN=${ACCESS_TOKEN}
+      - AGENT_GENERATOR_ACCESS_ID=${GENERATOR_ACCESS_ID}
+      - AGENT_FORMATTER_ACCESS_ID=${FORMATTER_ACCESS_ID}
+
+      - HOST=${API_HOST}
+      - PORT=${API_PORT}
+
+    volumes:
+      - ./files:/app/files
+
+    ports:
+      - ${API_PORT}:${API_PORT}
+    networks:
+      - caddy-network
+
+    depends_on:
+      - db
+
+  db:
+    container_name: db
+    image: postgres:17.0-alpine3.20
+    restart: on-failure
+
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+
+    expose:
+      - ${DB_PORT}
+
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+
+    command: -p ${DB_PORT}
+    networks:
+      - caddy-network
+
+  lab-frontend:
+    container_name: lab-frontend
+    restart: on-failure
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "9091:9091"
+    environment:
+      - NODE_ENV=production
+      - HOST=0.0.0.0
+      - PORT=9091
+    networks:
+      - caddy-network
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: caddy
+
+    ports:
+      - 80:80
+      - 443:443
+
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+      - ./Caddyfile:/etc/caddy/Caddyfile
+
+    restart: unless-stopped
+    networks:
+      - caddy-network
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+networks:
+  caddy-network:
+    driver: bridge
