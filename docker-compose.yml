@@ -2,7 +2,7 @@ services:
   lab:
     container_name: lab
     restart: on-failure
-
+    pull_policy: build
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -61,6 +61,7 @@ services:
   lab-frontend:
     container_name: lab-frontend
     restart: on-failure
+    pull_policy: build
     build:
       context: ./frontend
       dockerfile: Dockerfile
