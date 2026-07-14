@@ -451,6 +451,24 @@
 
             const apiBaseUrl = 'https://api.gost.alexdenkk.ru';
 
+            async function checkAuthAndRedirect() {
+                const accessToken = getAccessToken();
+                if (!accessToken) return;
+
+                try {
+                    const res = await fetch(apiBaseUrl + '/user/self/', {
+                        method: 'GET',
+                        headers: { 'Authorization': 'Bearer ' + accessToken }
+                    });
+
+                    if (res.ok) {
+                        window.location.href = '/lk/list/';
+                    }
+                } catch (_) {
+                    // ignore: keep auth page
+                }
+            }
+
             const LS_KEYS = {
                 access: 'gost_access_token',
                 refresh: 'gost_refresh_token',
@@ -541,6 +559,8 @@
             function showError(message) {
                 alert(message);
             }
+
+            checkAuthAndRedirect();
 
             const loginForm = document.querySelector('#login-form form');
             loginForm.addEventListener('submit', async function(e) {

@@ -670,6 +670,8 @@
 
     <script>
         (function() {
+            const apiBaseUrl = 'https://api.gost.alexdenkk.ru';
+
             const fileInput = document.getElementById('imageUpload');
             const imageList = document.getElementById('imageList');
             const emptyMsg = imageList.querySelector('.image-empty');
@@ -733,7 +735,6 @@
                 return div;
             }
 
-            const apiBaseUrl = 'https://api.gost.alexdenkk.ru';
             const LS_KEYS = {
                 access: 'gost_access_token',
                 refresh: 'gost_refresh_token',
@@ -748,6 +749,33 @@
             function clearTokens(){
                 localStorage.removeItem(LS_KEYS.access);
                 localStorage.removeItem(LS_KEYS.refresh);
+            }
+
+            async function checkAuthOrRedirect(){
+                const accessToken = getAccessToken();
+                if (!accessToken) {
+                    window.location.href = '/auth/';
+                    return false;
+                }
+
+                try {
+                    const res = await fetch(apiBaseUrl + '/user/self/', {
+                        method: 'GET',
+                        headers: { 'Authorization': 'Bearer ' + accessToken }
+                    });
+
+                    if (!res.ok || res.status === 403) {
+                        clearTokens();
+                        window.location.href = '/auth/';
+                        return false;
+                    }
+
+                    return true;
+                } catch (e) {
+                    clearTokens();
+                    window.location.href = '/auth/';
+                    return false;
+                }
             }
 
             async function refreshTokensOnce(){
@@ -803,6 +831,13 @@
                 }
 
                 return res;
+            }
+
+            async function init(){
+                const ok = await checkAuthOrRedirect();
+                if (!ok) return;
+
+                startRefreshLoop();
             }
 
             const form = document.getElementById('reportForm');
@@ -883,6 +918,11 @@
                     setGenerating(false);
                     alert('Ошибка сети при генерации');
                 }
+            });
+
+            init().catch(() => {
+                clearTokens();
+                window.location.href = '/auth/';
             });
         })();
     </script>

@@ -447,9 +447,36 @@
                     refreshTimer = setInterval(() => {
                         refreshTokensOnce().catch(() => {
                             clearTokens();
-                            window.location.href = 'auth.html';
+                            window.location.href = '/auth/';
                         });
                     }, 60000);
+                }
+            }
+
+            async function checkAuthOrRedirect(){
+                const accessToken = getAccessToken();
+                if (!accessToken) {
+                    window.location.href = '/auth/';
+                    return false;
+                }
+
+                try {
+                    const res = await fetch(apiBaseUrl + '/user/self/', {
+                        method: 'GET',
+                        headers: { 'Authorization': 'Bearer ' + accessToken }
+                    });
+
+                    if (!res.ok || res.status === 403) {
+                        clearTokens();
+                        window.location.href = '/auth/';
+                        return false;
+                    }
+
+                    return true;
+                } catch (e) {
+                    clearTokens();
+                    window.location.href = '/auth/';
+                    return false;
                 }
             }
 
@@ -548,11 +575,6 @@
             }
 
             async function fetchLabs(){
-                if (!getAccessToken()) {
-                    window.location.href = 'auth.html';
-                    return;
-                }
-
                 const res = await apiRequest('/lab/self/', { method: 'GET' });
                 if (!res.ok) {
                     const data = await res.json().catch(()=>null);
@@ -576,8 +598,13 @@
                 }
             }
 
-            startRefreshLoop();
-            fetchLabs();
+            (async function init() {
+                const ok = await checkAuthOrRedirect();
+                if (!ok) return;
+
+                startRefreshLoop();
+                await fetchLabs();
+            })();
         })();
     </script>
 </body>
