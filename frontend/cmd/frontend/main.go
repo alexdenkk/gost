@@ -16,6 +16,10 @@ func main() {
 	router.HandleFunc("/lk/generate/", GeneratePage)
 	router.HandleFunc("/lk/list/", ListPage)
 
+	router.HandleFunc("/logo/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/static/logo.png")
+	})
+
 	server := &http.Server{
 		ReadTimeout:  15 * time.Second,
 		WriteTimeout: 15 * time.Second,
