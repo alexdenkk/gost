@@ -15,6 +15,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -196,6 +197,8 @@ func (service *service) Generate(ctx context.Context, lab domain.Lab, claims *jw
 			os.WriteFile("files/"+lab.ID.String()+".typ", []byte(text), 0644)
 
 			err = service.runCommand("./typst", "compile", "files/"+lab.ID.String()+".typ")
+
+			time.Sleep(time.Second)
 
 			if err != nil && !service.fileExists(lab.ID.String()+".pdf") {
 				output = err.Error()
