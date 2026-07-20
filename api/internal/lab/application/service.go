@@ -116,7 +116,6 @@ func (service *service) Generate(ctx context.Context, lab domain.Lab, claims *jw
 	}
 
 	firstPage := sb.String()
-	typstOutput := ""
 	imagesForAgent := []map[string]string{}
 
 	for _, img := range lab.Images {
@@ -140,9 +139,8 @@ func (service *service) Generate(ctx context.Context, lab domain.Lab, claims *jw
 	}
 
 	encodedLab, _ := json.Marshal(map[string]interface{}{
-		"lab":          volumes,
-		"images":       imagesForAgent,
-		"typst_output": typstOutput,
+		"lab":    volumes,
+		"images": imagesForAgent,
 	})
 
 	resp, err := service.agent.Call(
@@ -199,7 +197,7 @@ func (service *service) Generate(ctx context.Context, lab domain.Lab, claims *jw
 
 			err = service.runCommand("./typst", "compile", "files/"+lab.ID.String()+".typ")
 
-			if err != nil {
+			if err != nil && !service.fileExists(lab.ID.String()+".pdf") {
 				output = err.Error()
 				parentID = resp.ID
 				continue
@@ -230,6 +228,11 @@ func (service *service) Generate(ctx context.Context, lab domain.Lab, claims *jw
 	}
 
 	return nil
+}
+
+func (service *service) fileExists(path string) bool {
+	_, err := os.Stat(path)
+	return err == nil
 }
 
 func (service *service) runCommand(command string, args ...string) error {
