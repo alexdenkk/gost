@@ -200,8 +200,13 @@ func (service *service) Generate(ctx context.Context, lab domain.Lab, claims *jw
 
 			time.Sleep(time.Second)
 
-			if err != nil && !service.fileExists("files/"+lab.ID.String()+".pdf") {
+			t := service.fileExists("files/" + lab.ID.String() + ".pdf")
+
+			fmt.Println("ФАЙЛ НАЙДЕН: ", t)
+
+			if err != nil && !t {
 				output = err.Error()
+				fmt.Println("ОШИБКА СРАБОТАЛА")
 				parentID = resp.ID
 				continue
 			}
@@ -210,7 +215,7 @@ func (service *service) Generate(ctx context.Context, lab domain.Lab, claims *jw
 		}
 	}
 
-	if !generated {
+	if err != nil && !generated {
 		return errors.New("ошибка при генерации pdf")
 	}
 
