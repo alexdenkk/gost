@@ -200,7 +200,7 @@ func (service *service) Generate(ctx context.Context, lab domain.Lab, claims *jw
 
 			time.Sleep(time.Second)
 
-			if err != nil && !service.fileExists(lab.ID.String()+".pdf") {
+			if err != nil && !service.fileExists("files/"+lab.ID.String()+".pdf") {
 				output = err.Error()
 				parentID = resp.ID
 				continue
